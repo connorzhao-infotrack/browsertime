@@ -25,7 +25,8 @@
     "soprano-saxophone": "0.14.0",
     "valid-url": "1.0.9",
     "xvfb": "0.2.3",
-    "yargs": "7.0.2"
+    "yargs": "7.0.2",
+	"request": "2.81.0"
   },
   "devDependencies": {
     "chai": "^3.4.0",
