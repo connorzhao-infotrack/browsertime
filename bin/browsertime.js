@@ -2,7 +2,6 @@
 'use strict';
 
 let Engine = require('../').Engine,
-  config = require('../config'),
   browserScripts = require('../lib/support/browserScript'),
   logging = require('../').logging,
   cli = require('../lib/support/cli'),
@@ -14,9 +13,7 @@ let Engine = require('../').Engine,
   pick = require('lodash.pick'),
   fs = require('fs'),
   path = require('path'),
-  log = require('intel'),
-  request = require('request');
-
+  log = require('intel');
 
 Promise.promisifyAll(fs);
 
@@ -25,12 +22,12 @@ function parseUserScripts(scripts) {
     scripts = [scripts];
 
   return Promise.reduce(scripts, (results, script) =>
-    browserScripts.findAndParseScripts(path.resolve(script), 'custom')
-      .then((scripts) => merge(results, scripts)),
+      browserScripts.findAndParseScripts(path.resolve(script), 'custom')
+        .then((scripts) => merge(results, scripts)),
     {});
 }
 
-function run(url, options,elasticUrl) {
+function run(url, options) {
   let dir = 'browsertime-results';
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir);
@@ -64,13 +61,6 @@ engine.start()
       const jsonName = (options.output) ? (options.output) : 'browsertime';
       const btData = pick(result, ['info', 'browserScripts', 'statistics', 'visualMetrics', 'timestamps']);
       if (!isEmpty(btData)) {
-		    request({
-					url: elasticUrl,
-					method: "POST",
-					json: true,   // <--Very important!!! 
-					body: btData
-				}
-				);
         saveOperations.push(storageManager.writeJson(jsonName + '.json', btData));
       }
       if (result.har) {
@@ -87,11 +77,11 @@ engine.start()
           return result;
         });
     })
-    .catch(function (e) {
+    .catch(function(e) {
       log.error('Error running browsertime', e);
       throw e;
     })
-    .finally(function () {
+    .finally(function() {
       log.debug('Stopping Browsertime');
       return engine.stop()
         .tap(() => {
@@ -103,11 +93,10 @@ engine.start()
           process.exitCode = 1;
         });
     })
-    .catch(function () {
+    .catch(function() {
       process.exitCode = 1;
     })
-    // finally is comment out due to we want to keep it running
-    //.finally(process.exit); // explicitly exit to avoid a hanging process  
+    .finally(process.exit); // explicitly exit to avoid a hanging process
 }
 
 let cliResult = cli.parseCommandLine();
@@ -117,14 +106,5 @@ logging.configure(cliResult.options);
 if (log.isEnabledFor(log.CRITICAL)) { // TODO change the threshold to VERBOSE before releasing 1.0
   Promise.longStackTraces();
 }
-log.info("#RUN test 1 website 1");
-run(config.url[0], cliResult.options, config.elasticPostUrl[0]);
-let i = 1;
-const UrlNum = config.url.length;
-setInterval(function () {
-  let index = i % UrlNum;
-  run(config.url[index], cliResult.options, config.elasticPostUrl[index]);
-  log.info("#RUN test " + (Math.floor(i/UrlNum)+1)+" website "+ (index+1));
-  i++;
-}, config.runInterval / UrlNum);
 
+run(cliResult.url, cliResult.options);
