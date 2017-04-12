@@ -111,7 +111,7 @@ engine.start()
 }
 
 let cliResult = cli.parseCommandLine();
-
+cliResult.options.preScript = config.prescript;
 logging.configure(cliResult.options);
 
 if (log.isEnabledFor(log.CRITICAL)) { // TODO change the threshold to VERBOSE before releasing 1.0
