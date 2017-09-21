@@ -1,5 +1,180 @@
 # Browsertime changelog
 -------------------------
+
+version 1.8.2 2017-09-17
+-------------------------
+### Fixed
+* Always (yes always) use no-sandbox for Chrome when running in Docker.
+
+version 1.8.1 2017-09-16
+-------------------------
+### Fixed
+* Even bigger bottom margin (20px) for videos to make emulated mobile lastVisualChange correct.
+
+version 1.8.0 2017-09-13
+-------------------------
+### Added 
+* Easy to run Firefox Nightly, just pass --firefox.nightly (and -b firefox)
+* Support for running Firefox and Chrome in headless mode --headless. You need Firefox Nightly or Chrome stagble  [#361](https://github.com/sitespeedio/browsertime/pull/361)
+* Upgraded to Chrome 61 in the Dockerfile
+* You can now change the framerate of the video with --videoParams.framerate
+* You can also change the constant rate factor of the video --videoParams.crf see https://trac.ffmpeg.org/wiki/Encode/H.264#crf
+* Added visualComplete95 and visualComplete99 metrics.
+
+### Changed
+* Old parameter videoRaw is renamed to --videoParams.addTimer to toogle timer/text in the video (old videoRaw is deprecated but still works).
+
+### Fixed
+* Changed Docker workdir so it is possible to use pre/post script in Docker. This means you need to map your volume as "$(pwd)":/browsertime [#363](https://github.com/sitespeedio/browsertime/pull/363)
+
+* Changed the bottom margin for videos (made it a little larger) to fix lastVisualChange when emulating mobile [sitespeed.io #1690](https://github.com/sitespeedio/sitespeed.io/issues/1690)
+
+version 1.7.0 2017-08-29
+-------------------------
+### Added
+* More metrics in the HAR: We now add Visual metrics, connectivity and domContentLoadedTime/domInteractiveTime. They are then picked up by PerfCascade. This was earlier done in sitespeed.io.
+
+version 1.6.1 2017-08-18
+-------------------------
+### Fixed
+* Correct naming in the CLI help when emulating an iPhone ('iPhone 6'). It was changed in Chromedriver 2.31.0 (or was it 2.30.0?).
+* Added missing browser name in the HAR when you run as Chrome as emulated.
+* New go at VisualMetrics to try to avoid those partly orange screens for Chrome.
+
+version 1.6.0 2017-07-27
+-------------------------
+### Fixed
+* Upgrade to Chrome 60 stable from 60 beta in the Docker container
+* Upgrading to Chromedriver 2.31.0
+* Upgrading to Selenium 3.5
+
+### Added
+* We now support adding request headers, blocking domains and using basic auth in Firefox since latest Selenium and @tobli:s [PR](https://github.com/SeleniumHQ/selenium/pull/3846) for supporting Web Extensions in Firefox!
+
+version 1.5.4 2017-07-19
+-------------------------
+### Fixed
+* Latest NodeJS 6.11.1 in the Docker container.
+* Upgrade to Geckodriver 0.18.0 for Firefox.
+* Fine tuning choosing orange frames see [#1673 sitespeed.io](https://github.com/sitespeedio/sitespeed.io/issues/1673)
+
+version 1.5.3 2017-06-30
+-------------------------
+### Fixed
+* Upgraded chrome-har to fix https://github.com/sitespeedio/sitespeed.io/issues/1654
+* Upgraded Docker to use latest Chrome beta and include fonts for Hindi, Thai, Japanese, Chinese and Korean.
+
+version 1.5.2 2017-06-23
+-------------------------
+### Fixed
+* Upgraded (again) from Chromedriver 2.28 to 2.30 with a very special hack [#347](https://github.com/sitespeedio/browsertime/pull/347).
+
+version 1.5.1 2017-06-22
+-------------------------
+### Fixed
+* Downgraded (again) from Chromedriver 2.30 to 2.28 to get --chrome.collectTracingEvents to work again.
+
+version 1.5.0 2017-06-22
+-------------------------
+### Added
+* Upgraded to Chromedriver 2.30.0 fixes [#337](https://github.com/sitespeedio/browsertime/issues/337).
+* Upgraded to Geckodriver 0.17.0 seems to fix [#321](https://github.com/sitespeedio/browsertime/issues/321)
+* Pickup metrics from the Paint Timing API [#344](https://github.com/sitespeedio/browsertime/pull/344), will work in Chrome 60.
+* Updated the Docker container to Firefox 54 and Chrome 60 (beta) to fix the background color problem. [Chrome bug 727046](https://bugs.chromium.org/p/chromium/issues/detail?id=727046)
+
+version 1.4.0 2017-06-03
+-------------------------
+### Fixed
+* Updated to latest NodeJS and FFMPeg in the Docker container.
+
+### Added
+* Set Selenium capabilities (hidden pro feature for now).
+
+version 1.3.0 2017-06-01
+-------------------------
+### Added
+
+* Added --preURLDelay (in ms) so you can choose how long time you want to wait until you hit the main URL after the pre URL.
+
+### Fixed
+* Fixed setting proxy using --proxy.http and --proxy.https [#338](https://github.com/sitespeedio/browsertime/issues/338)
+* Updated to chrome-har 0.2.1 that: add "serverIPAddress" field to entries, set bodySize for requests correctly, set bodySize and compression for responses correctly, and add \_transferSize field for responses, just like Chrome does.
+
+version 1.2.7 2017-05-26
+-------------------------
+### Fixed
+* Downgraded to Chromedriver 2.29 to 2.28 to get --chrome.collectTracingEvents to work again (hope for a fix in 2.30).
+
+version 1.2.6 2017-05-21
+-------------------------
+### Fixed
+* Setting Firefox preferences with values true/false didn't work as expected. [#336](https://github.com/sitespeedio/browsertime/issues/336)
+
+version 1.2.5 2017-05-14
+-------------------------
+### Fixed
+* Reverted changes in 1.2.4 since it caused firstVisualChange to fire to early on desktop. [#335](https://github.com/sitespeedio/browsertime/issues/335)
+
+version 1.2.4 2017-05-13
+-------------------------
+### Fixed
+* Internal: New version of VisualMetrics that catches frames that is partly in one (gray/orange) color.
+
+version 1.2.3 2017-05-12
+-------------------------
+### Fixed
+* URLs with a comma-sign (",") broke Browsertime if you also collected VisualMetrics [#333](https://github.com/sitespeedio/browsertime/issues/333).
+
+* New version of VisaulMetrics (thanks Pat) that makes possible to remove those grey background that started to appear in Chrome 58 if you run it in emulated mode. The original bug created to early first visual render in emulated mode  [#323](https://github.com/sitespeedio/browsertime/issues/323).
+
+version 1.2.2 2017-05-11
+-------------------------
+### Fixed
+* The video for Firefox now works with different view ports [#329](https://github.com/sitespeedio/browsertime/issues/329).
+* More safe way to find the first white frame when cutting an creating the video [#331](https://github.com/sitespeedio/browsertime/pull/331)]
+* Get Chrome NetLog (--chrome.collectNetLog) now also works on Android [#306](https://github.com/sitespeedio/browsertime/issues/306)
+
+version 1.2.1 2017-05-09
+-------------------------
+### Fixed
+* Remove a couple of more black pixels in the video from Firefox
+
+version 1.2.0 2017-05-09
+-------------------------
+### Fixed
+* Removed the black borders in the video from Firefox [#285](https://github.com/sitespeedio/browsertime/issues/285).
+
+### Added
+* Support for Basic Auth in Chrome (Firefox will have it in 54 as long as https://github.com/SeleniumHQ/selenium/pull/3846 gets released). Use --basicAuth username@password [#328](https://github.com/sitespeedio/browsertime/pull/328).
+
+version 1.1.2 2017-05-02
+-------------------------
+### Fixed
+* You can now run Android devices in your Docker container on Ubuntu. Check the [README](https://github.com/sitespeedio/browsertime#test-on-your-mobile-device) for more info. Inspired by [https://github.com/sorccu/docker-adb](https://github.com/sorccu/docker-adb).
+
+version 1.1.1 2017-04-23
+-------------------------
+### Fixed
+* New version of the browsertime extension to turn off save password bubble for Chrome.
+
+version 1.1.0 2017-04-23
+-------------------------
+### Changed
+* Block requests by domain (--block) and add request headers (-r name:value). Only works in Chrome for now, it will get fixed for Firefox when https://github.com/SeleniumHQ/selenium/pull/3846 is released in Selenium.
+* Upgrade to Selenium 3.4.0 and Geckodriver 0.15.0 to get Firefox 53.0 working.
+* Docker container now uses Chrome 58 and Firefox 53.
+
+version 1.0.0 2017-04-07
+-------------------------
+### Changed
+* Same code as beta 34, but a different feeling. =)
+
+-------------------------
+version 1.0.0-beta.34 2017-04-06
+-------------------------
+### Added
+* Support for video and SpeedIndex on Android. This is still experimental and we need help to test it on different devices!
+
 version 1.0.0-beta.33 2017-04-04
 -------------------------
 ### Fixed

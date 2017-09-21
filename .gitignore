@@ -7,3 +7,5 @@ doc/sequence-diagrams/*.png
 *.iml
 .vscode
 /browsertime-results/
+.tern-project
+package-lock.json
