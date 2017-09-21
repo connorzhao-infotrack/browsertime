@@ -13,6 +13,16 @@ config.elasticPostUrl=[
 	'http://search-auaws-metrics-prod-shtlpsnw2kdw6tmpazoeemhskq.ap-southeast-2.es.amazonaws.com/tasspeed-user2/external?pretty',
     'http://search-auaws-metrics-prod-shtlpsnw2kdw6tmpazoeemhskq.ap-southeast-2.es.amazonaws.com/saspeed-user2/external?pretty'
 ];
+config.url=[
+    'https://search.infotrack.com.au',
+    'https://search.infotrack.com.au/Nsw/Search',
+    'https://search.infotrack.com.au/Victoria/Search'
+];
+config.elasticPostUrl=[
+    'http://search-auaws-metrics-prod-shtlpsnw2kdw6tmpazoeemhskq.ap-southeast-2.es.amazonaws.com/websitespeed/external?pretty',
+    'http://search-auaws-metrics-prod-shtlpsnw2kdw6tmpazoeemhskq.ap-southeast-2.es.amazonaws.com/nswspeed/external?pretty',
+	'http://search-auaws-metrics-prod-shtlpsnw2kdw6tmpazoeemhskq.ap-southeast-2.es.amazonaws.com/vicspeed/external?pretty'
+];
 config.runInterval=60000;
 config.prescript="/preLoginExample.js";
 config.username='un';
